@@ -42,11 +42,11 @@ app.post('/', (req, res) => {
 const logTestResult = () => {
   END_TIME = process.hrtime()
   console.log(`<---- TEST RESULT ----> \n 
-              Test for ${numberOfMsg} messages with payload of ${payload} took \n
+              Test with ${numberOfMsg} messages and payload of ${payload} took \n
               ${END_TIME[0] * 1000 +
                 END_TIME[1] / 1000000 -
                 START_TIME[0] * 1000 +
-                START_TIME[1] / 1000000} millisecond`)
+                START_TIME[1] / 1000000} milliseconds`)
 }
 
 postToNode1 = msg => {
@@ -107,7 +107,7 @@ const generateRandomMessages = (base, length, numberOfMsg) => {
   return messages.concat('END')
 }
 
-if (testerClient === 'true') {
+if (testerClient === 'tester') {
   const randomMessage = generateRandomMessages(base, payload, numberOfMsg)
   randomMessage.forEach(msg => {
     send(`from client ${client} :${msg}`)
