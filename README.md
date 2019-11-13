@@ -18,7 +18,7 @@ You need to have <a href="https://nodejs.org/en/">NodeJS</a> installed.
 
 5. Send messages between clients.`
 
-## Test with random
+## Test with random messages
 
 Open three terminal windows/tabs on current directory.
 

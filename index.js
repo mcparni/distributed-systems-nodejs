@@ -10,10 +10,10 @@ const rl = readline.createInterface({
 const args = process.argv.slice(2)
 const client = args[0]
 const port = args[1]
-//Open two clients without and one with this argument to set 'true'
+//Open two clients without and one with this argument set 'true'
 const testerClient = args[2]
 
-// Test messages configuration
+// Test messages configurations
 const base = 'WHAT A COOL COURSE THIS IS'
 const numberOfMsg = 50
 const payload = 10
