@@ -3,6 +3,7 @@ const app = express()
 const axios = require('axios')
 const bodyParser = require('body-parser')
 const readline = require('readline')
+const winston = require('winston')
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -23,6 +24,13 @@ const payload = 10
 const node1Url = 'http://localhost:3000/'
 const node2Url = 'http://localhost:3001/'
 const node3Url = 'http://localhost:3002/'
+
+// create logger and log file (if it does not exist) for client
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({ filename: 'client_'+client +'.log' })
+  ]
+})
 
 let START_TIME
 let END_TIME
@@ -58,9 +66,15 @@ app.get('/status', (req, res) => {
   return res.sendStatus(200)
 })
 
+const log = msg => {
+  var now = new Date().toISOString()
+  logger.info(`${now} : ${msg}`);
+}
+
 app.post('/', (req, res) => {
   MSG_COUNTER++
   console.log(req.body.msg)
+  log(req.body.msg)
   if (MSG_COUNTER === 1) {
     START_TIME = process.hrtime()
   }
@@ -111,10 +125,12 @@ const checkStatus = (nodeUrl, nodeNumber) => {
     .then(response => {
       if (response.status === 200) {
         console.log(`Node ${nodeNumber} is online`)
+        log(`Node ${nodeNumber} is online`)
       }
     })
     .catch(error => {
       console.log(`Node ${nodeNumber} is offline`)
+      log(`Node ${nodeNumber} is offline`)
     })
 }
 
