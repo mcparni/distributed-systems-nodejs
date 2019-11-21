@@ -54,6 +54,10 @@ const generateRandomMessages = (base, length) => {
 
 const randomMessages = generateRandomMessages(base, payload)
 
+app.get('/status', (req, res) => {
+  return res.sendStatus(200)
+})
+
 app.post('/', (req, res) => {
   MSG_COUNTER++
   console.log(req.body.msg)
@@ -101,6 +105,19 @@ postToNode3 = msg => {
   )
 }
 
+const checkStatus = (nodeUrl, nodeNumber) => {
+  axios
+    .get(`${nodeUrl}status`)
+    .then(response => {
+      if (response.status === 200) {
+        console.log(`Node ${nodeNumber} is online`)
+      }
+    })
+    .catch(error => {
+      console.log(`Node ${nodeNumber} is offline`)
+    })
+}
+
 const send = msg => {
   axios
     .all([postToNode1(msg), postToNode2(msg), postToNode3(msg)])
@@ -123,6 +140,11 @@ if (testerClient === 'tester') {
   rl.on('line', function(msg) {
     if (msg.toLowerCase() === 'quit') {
       process.exit(0)
+    }
+    if (msg.toLowerCase() === 'status') {
+      checkStatus(node1Url, 1)
+      checkStatus(node2Url, 2)
+      checkStatus(node3Url, 3)
     } else {
       send(`from client ${client} :${msg}`)
     }
@@ -133,3 +155,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`)
   //prompt();
 })
+
+checkStatus(node1Url, 1)
+checkStatus(node2Url, 2)
+checkStatus(node3Url, 3)
